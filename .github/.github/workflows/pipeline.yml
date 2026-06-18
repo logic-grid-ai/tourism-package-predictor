@@ -1,0 +1,76 @@
+name: Tourism Project Pipeline
+
+on:
+  push:
+    branches:
+      - main           # Auto-trigger on every push to main
+  workflow_dispatch:   # Allow manual runs via the Actions tab
+
+jobs:
+
+  register-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Register Raw Dataset on Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python model_building/data_register.py
+
+  data-prep:
+    needs: register-dataset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Prepare Splits and Upload to HF Dataset
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python model_building/prep.py
+
+  model-training:
+    needs: data-prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Start MLflow Server
+        run: |
+          nohup mlflow ui --host 0.0.0.0 --port 5000 &   # background MLflow tracking server
+          sleep 5                                        # give the server a moment to come up
+      - name: Train Model and Push to HF Model Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python model_building/train.py
+
+  deploy-hosting:
+    needs: model-training
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Push Deployment Files to HF Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python hosting/hosting.py
