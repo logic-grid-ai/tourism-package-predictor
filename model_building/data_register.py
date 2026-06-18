@@ -22,7 +22,7 @@ except RepositoryNotFoundError:
 
 # Upload the local data folder (contains tourism.csv) to the HF dataset repo.
 api.upload_folder(
-    folder_path="tourism_project/data",
+    folder_path="data",
     repo_id=repo_id,
     repo_type=repo_type,
 )

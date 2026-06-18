@@ -27,7 +27,7 @@ except RepositoryNotFoundError:
 # Upload the entire deployment folder to the Space root so HF Spaces' Docker
 # builder finds the Dockerfile and rebuilds the container automatically.
 api.upload_folder(
-    folder_path="tourism_project/deployment",
+    folder_path="deployment",
     repo_id=SPACE_REPO,
     repo_type="space",
     path_in_repo="",
