@@ -6,7 +6,7 @@ import os
 from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
 
-SPACE_REPO = "tourism-package-predictor"   # e.g. "<HF_USERNAME>/tourism-app"
+SPACE_REPO = "creativitysupreme/tourism-package-predictor"  
 
 api = HfApi(token=os.getenv("HF_TOKEN"))
 
