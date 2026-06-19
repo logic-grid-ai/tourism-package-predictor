@@ -7,6 +7,10 @@ import pandas as pd
 import joblib
 from huggingface_hub import hf_hub_download
 
+# set_page_config must be the FIRST Streamlit command on the page -- before any
+# other st.* call, including the cache spinner emitted by load_model() below.
+st.set_page_config(page_title="Tourism Package Prediction", layout="centered")
+
 MODEL_REPO = "creativitysupreme/tourism-predictor"
 MODEL_FILE = "best_tourism_model.joblib"
 
@@ -23,7 +27,6 @@ model = load_model()
 # ----------------------------------------------------------------------
 # Page header
 # ----------------------------------------------------------------------
-st.set_page_config(page_title="Tourism Package Prediction", layout="centered")
 st.title("Wellness Tourism Package — Purchase Likelihood")
 st.write(
     "This internal tool predicts whether a customer is likely to purchase the new "
