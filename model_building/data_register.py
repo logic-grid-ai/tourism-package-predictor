@@ -8,7 +8,7 @@ from huggingface_hub.utils import RepositoryNotFoundError
 repo_id = "creativitysupreme/tourism-data"
 repo_type = "dataset"
 
-# HF_TOKEN is injected via GitHub Actions secrets (or set locally for testing).
+# HF_TOKEN is injected via GitHub Actions secrets.
 api = HfApi(token=os.getenv("HF_TOKEN"))
 
 # Create the dataset repo on first run; reuse if it already exists.

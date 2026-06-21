@@ -15,7 +15,8 @@ MODEL_REPO = "creativitysupreme/tourism-predictor"
 MODEL_FILE = "best_tourism_model.joblib"
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)   # no spinner -> avoids a startup race that
+                                          # can raise "SessionInfo before initialized"
 def load_model():
     # Cached so the model is downloaded once per session, not on every click.
     path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
@@ -27,13 +28,13 @@ model = load_model()
 # ----------------------------------------------------------------------
 # Page header
 # ----------------------------------------------------------------------
-st.title("Wellness Tourism Package — Purchase Likelihood")
+st.title("Wellness Tourism Package - Purchase Likelihood")
 st.write(
     "This internal tool predicts whether a customer is likely to purchase the new "
     "Wellness Tourism Package. Enter the customer details below and click **Predict**."
 )
 
-# Threshold control in the sidebar — lets the analyst trade precision for recall.
+# Threshold control in the sidebar - lets the analyst trade precision for recall.
 threshold = st.sidebar.slider(
     "Classification threshold",
     min_value=0.0, max_value=1.0, value=0.5, step=0.05,

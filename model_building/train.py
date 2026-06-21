@@ -22,7 +22,7 @@ from huggingface_hub import HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError
 
 DATASET_REPO    = "creativitysupreme/tourism-data"
-MODEL_REPO      = "creativitysupreme/tourism-predictor"       # e.g. "<HF_USERNAME>/tourism-model"
+MODEL_REPO      = "creativitysupreme/tourism-predictor"
 EXPERIMENT_NAME = "tourism-package-prediction"
 MODEL_FILE      = "best_tourism_model.joblib"
 
@@ -102,7 +102,7 @@ grid_search = GridSearchCV(
 )
 
 # ----------------------------------------------------------------------
-# 6. MLflow experiment tracking — every combo + the best run.
+# 6. MLflow experiment tracking - every combo + the best run.
 # ----------------------------------------------------------------------
 mlflow.set_tracking_uri("http://localhost:5000")
 mlflow.set_experiment(EXPERIMENT_NAME)
